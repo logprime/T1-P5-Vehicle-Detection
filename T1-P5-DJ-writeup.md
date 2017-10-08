@@ -91,8 +91,9 @@ With LUV Colorspace
 A lower count of pixels_per_cell increased run time and memory resources for hog extraction. I also found that using 3 color channels gave better accuracy than single channel hog features.  
 
 Videos of my experimentation for entire clips are also below:- 
-Here's a [link to my video using HLS mapping with lot of false positives. ](./project_output_hls.mp4)
-Here's a [link to my video using YUV mapping with most false positives eliminated. ](./project_output_hls.mp4) 
+
+ 1. Here's a [link to my video using HLS mapping with lot of false positives. ](./project_output_hls.mp4)
+ 2. Here's a [link to my video using YUV mapping with most false positives eliminated. ](./project_output_hls.mp4) 
 
 However, I see that between 26s-28s the classifier does not correctly identify the white car in the frame. Hence I continued to play with threshold and colorspaces to fix such chronic issues. I finally settled on the "YCrCb" colorspace as the best option to eliminate false positives.
 
@@ -108,7 +109,6 @@ Final selected hog features:-
 * cells_per_block = (2, 2)
 * color space = "YCrCb"
 * channel used = "All" 
-
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
@@ -215,8 +215,8 @@ There are still some issues as described below:-
 
 1) Cars are detected in the opposite direction   
 2) Time lag between when car is able to get detected after entry into frame.    
-3) separate bounding box of overlapping cars
-4) False Negatives
+3) Separate bounding box of overlapping cars
+4) False negatives
 
 ![False Negatives][image57]
 
