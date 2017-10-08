@@ -30,18 +30,18 @@ The goals / steps of this project are the following:
 [video1]: ./project_output_ycrcb_th4.mp4
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
-###Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
+### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
 ---
-###Writeup / README
+### Writeup / README
 
 ####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  
 
 The write below describes how I approached  the project. I have used functions that were described in the lectures as well as by Ryan in his Q&A video session.
 
-###Histogram of Oriented Gradients (HOG)
+### Histogram of Oriented Gradients (HOG)
 
-####1. Explain how (and identify where in your code) you extracted HOG features from the training images.
+#### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
 The code for this step is contained in the function `get_hog_features` defined in **HOG Feature Extraction Function** section of the `T1-P5-DJ.ipynb`.
 
@@ -60,7 +60,7 @@ Note: I am using NIPY-Spectral cmap to allow for easier visualization by the hum
 
 ![hog features][image23]
 
-####2. Explain how you settled on your final choice of HOG parameters.
+#### 2. Explain how you settled on your final choice of HOG parameters.
 
 One of the over-arching focus I had was to maintain balance between accuracy on the test set, and the size of the feature set. This is critical since training time is directly related to the size of the feature set. 
 
@@ -102,7 +102,13 @@ There are all my experimental subclips in the folder where I have experimented e
 
 Here's a [link to my video using HLS mapping with lot of false positives. ](./project_output_hls.mp4)
 
-####3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
+Here's a [link to my video using YUV mapping with most false positives eliminated. ](./project_output_hls.mp4) 
+
+However, I see that at between 26s-28s the classifier does not correctly identify the white car in the frame. Hence I continued to play with threshold and colorspaces to fix this one nagging issue. 
+
+I have kept all my experimental subclips under the 'subclips' folder.
+
+#### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
 The feature extraction function `extract_features` uses multiple functions such spatial down sampling, color histogram and HOG to generate a feature vector for each of the images. I normalize the vectors before training them. The full pipeline is shown below.
 
@@ -126,33 +132,31 @@ I create hog of each channel as discussed in hog section of this document.
 I standardize the data by using `StandardScaler` module of `sklearn.preprocessing`.   
 I randomly split training and testing data (20%) for cross-validation. After training SVM on train data, we find accuracy of more than 98% on testing data. 
 
-###Sliding Window Search
+### Sliding Window Search
 
-####1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
+#### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
 I slide windows of size 64 * 64 across the image. In each portion of sliding window, I extract features and check for cars using trained model. I collect all car predicting boxes. I maintain an overlap of 50% between different windows which was able to give car detections with good runtime performance.   
 
 To find cars with varying view sizes, I resize the image with different scales 1.1,1.5,1.8,2.0,2.5 and then run slide windows. I did not want to use very small window sizes since expectations for car to fit certain size. I also limited my search to be half way into image size to minimize false positives like finding cars where they are not expected to be (like on top of a try or in cloud formation in the sky).   
 
 Implementation of sliding windows can be found at `find_cars` function of `T1-P5-DJ.ipynb`.  
-Below is sample image of boxes found through sliding windows.
+Below is sample image of boxes found through sliding windows. As you can see, the cars in the opposite lanes are also identified by the classifier. 
 
 ![sliding windows][image3]
 
-Below shows the range of the  limited search area of sliding windows in between road lanes used to improved performance of my pipeline.   
+Below shows the range of the bounded search area of sliding windows in between road lanes used to improved performance of my pipeline.  Perhaps one can consider bounding this further but then position of the car in the lane can change from left most to the right most. This probably means only bound on the y-axis is meaningful. 
 
 ![sliding limit][image4]
 
 
-####2. Show some examples of test images to demonstrate how your pipeline is working. What did you do to optimize the performance of your classifier?
+#### 2. Show some examples of test images to demonstrate how your pipeline is working. What did you do to optimize the performance of your classifier?
 
 I create HOG of entire image once and just take its subsample on each sliding window to improve runtime performance. 
 
-To overcome false detections, I limited search area of sliding windows in between road lanes as shown in below image. This also improved performance of my pipeline.   
+To overcome false detection, I limited search area of sliding windows in between road lanes as shown in below image as described in the previous section.
 
-![sliding limit][image4]
-
-Also I create a heatmap as per count of boxes in each pixel and apply a threshold limit so that false detections are filtered out. Output of my pipeline for different test images is depicted below.  
+Also I create a heatmap as per count of boxes in each pixel and apply a threshold limit so that false detection is filtered out. Output of my pipeline for different test images is depicted below.  
 
 ![pipeline][image51]
 ![pipeline][image52]
@@ -167,11 +171,11 @@ See also my description in the section above **Section 2** which talks about how
 
 ### Video Implementation
 
-####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)    
+#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)    
 Here's a [link to my final video result](./project_output_ycrcb_th4.mp4)
 
 
-####2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
+#### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
 I recorded the positions of positive detections in each frame of the video.  From the positive detections, I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap. I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
 Check pipeline output image in last section.
@@ -199,9 +203,9 @@ def get_labels(img, Q = None):
 
 ---
 
-###Discussion
+### Discussion
 
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
 Pipeline mentioned in this document is able to detect cars with great accuracy in most of frames of the submitted video. 
 
@@ -217,6 +221,6 @@ There are still some issues as described below:-
 
 To make pipeline more robust, we can try following actions
 1) Use richer vehicls/non-vehicles dataset. In my opinion this will have the most impact for better classification.
-2) Using Deep Learning as an alternative 
-2) Better Thersholds, hyperparameters
+2) Using deep learning image classifier like AlexNet as an alternative 
+2) Vary thresholds, hyperparameters and use better window averaging techniques for frame to frame matching. 
 4) Try on different videos and road conditions
