@@ -88,28 +88,27 @@ With HLS Colorspace
 With LUV Colorspace
 ![False Positive LUV][image62]
 
-A lower count of pixels_per_cell increased run time and memory resources for hog extraction. I also found that using 3 color channels gave better accuracy than single channel hog features.  And I used the "YCrCb" colorspace to eliminate false positives.
+A lower count of pixels_per_cell increased run time and memory resources for hog extraction. I also found that using 3 color channels gave better accuracy than single channel hog features.  
 
-Finally I settled on following hog features:-
+Videos of my experimentation for entire clips are also below:- 
+Here's a [link to my video using HLS mapping with lot of false positives. ](./project_output_hls.mp4)
+Here's a [link to my video using YUV mapping with most false positives eliminated. ](./project_output_hls.mp4) 
+
+However, I see that between 26s-28s the classifier does not correctly identify the white car in the frame. Hence I continued to play with threshold and colorspaces to fix such chronic issues. I finally settled on the "YCrCb" colorspace as the best option to eliminate false positives.
+
+I have kept all my experimental subclips under the 'subclips' folder where I have experimented extensively with following additional parameters:-
+
+ 1. Thresholding 
+ 2. Scaling of window sizes
+ 3. Selecting the Q depth for frame to frame averaging
+
+Final selected hog features:-
 * orientations    = 9
 * pixels_per_cell = (8, 8)
 * cells_per_block = (2, 2)
 * color space = "YCrCb"
 * channel used = "All" 
 
-There are all my experimental subclips in the folder where I have experimented extensively with following additional parameters:-
-
- 1. Thresholding 
- 2. Scaling of window sizes
- 3. Selecting the Q depth for frame to frame averaging
-
-Here's a [link to my video using HLS mapping with lot of false positives. ](./project_output_hls.mp4)
-
-Here's a [link to my video using YUV mapping with most false positives eliminated. ](./project_output_hls.mp4) 
-
-However, I see that at between 26s-28s the classifier does not correctly identify the white car in the frame. Hence I continued to play with threshold and colorspaces to fix this one nagging issue. 
-
-I have kept all my experimental subclips under the 'subclips' folder.
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
