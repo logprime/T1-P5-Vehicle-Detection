@@ -82,11 +82,13 @@ As one can note my feature space reduced by 20% going from orientation of 12 to 
 
 Next I played with  various colorspaces, and found false positives in using some of them. This is shown below:-
 
+With HLS Colorspace
 ![False Positive HLS][image61]
 
+With LUV Colorspace
 ![False Positive LUV][image62]
 
-A lower count of pixels_per_cell increased run time and memory resources for hog extraction. I also found that using 3 color channels gave better accuracy than single channel hog features.  
+A lower count of pixels_per_cell increased run time and memory resources for hog extraction. I also found that using 3 color channels gave better accuracy than single channel hog features.  And I used the "YCrCb" colorspace to eliminate false positives.
 
 Finally I settled on following hog features:-
 * orientations    = 9
