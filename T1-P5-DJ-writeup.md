@@ -23,9 +23,9 @@ The goals / steps of this project are the following:
 [image55]: ./output_images/pipeline5.png
 [image56]: ./output_images/pipeline6.png
 [image57]: ./output_images/pipeline7.png
-[image61]:./output_images/falsepositivehls.png
-[image62]:./output_images/falsepositiveluv.png
-[image7]:./output_images/trainpipeline.jpg
+[image61]: ./output_images/falseposhls.png
+[image62]: ./output_images/falseposluv.png
+[image7]: ./output_images/trainpipeline.jpg
 
 [video1]: ./project_output_ycrcb_th4.mp4
 
@@ -35,7 +35,7 @@ The goals / steps of this project are the following:
 ---
 ### Writeup / README
 
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  
+#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  
 
 The write below describes how I approached  the project. I have used functions that were described in the lectures as well as by Ryan in his Q&A video session.
 
@@ -83,9 +83,10 @@ As one can note my feature space reduced by 20% going from orientation of 12 to 
 Next I played with  various colorspaces, and found false positives in using some of them. This is shown below:-
 
 ![False Positive HLS][image61]
+
 ![False Positive LUV][image62]
 
-I found that with lower count of pixels_per_cell, running time and memory resources for hog extraction are high. I also found that using 3 color channels gave better accuracy than single channel hog features.  
+A lower count of pixels_per_cell increased run time and memory resources for hog extraction. I also found that using 3 color channels gave better accuracy than single channel hog features.  
 
 Finally I settled on following hog features:-
 * orientations    = 9
@@ -221,6 +222,6 @@ There are still some issues as described below:-
 
 To make pipeline more robust, we can try following actions
 1) Use richer vehicls/non-vehicles dataset. In my opinion this will have the most impact for better classification.
-2) Using deep learning image classifier like AlexNet as an alternative 
+2) Use deep learning image classifier like AlexNet as an alternative 
 2) Vary thresholds, hyperparameters and use better window averaging techniques for frame to frame matching. 
-4) Try on different videos and road conditions
+4) Experiment with different videos and road conditions
